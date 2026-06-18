@@ -1,0 +1,4 @@
+driver=oracle.jdbc.driver.OracleDriver
+url=jdbc:oracle:thin:@transfermx.dyndns.org:1521:xe
+usr=seyl2
+pass=seyl2
