@@ -26,12 +26,14 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
-import javax.persistence.EntityManager;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 
 /**
  *
@@ -228,7 +230,11 @@ public class CtrlUsuario extends HttpServlet {
     private String obtenModulosUsuario(HttpServletRequest request) {
 
         Liusuarios u = Utilities.ReactivarSession(request);
-        String welcome = "{xtype:'label',text:'" + u.getUsuidpuesto().getUpnombrepuesto() + "',style:'font-weight:bold;font-size:12px;'},"
+        
+        // Validación preventiva: si el puesto es nulo, asigna un texto por defecto
+        String nombrePuesto = (u.getUsuidpuesto() != null) ? u.getUsuidpuesto().getUpnombrepuesto() : "SIN PUESTO ASIGNADO";
+
+        String welcome = "{xtype:'label',text:'" + nombrePuesto + "',style:'font-weight:bold;font-size:12px;'},"
                 + "{xtype:'label',html:'" + u.getUsunombre() + " " + u.getUsupaterno() + "',style:'color: black;font-weight: bold; font-size: 12px;'},";
         String strModulos = "[" + welcome + "{xtype:'label', text:'No tienes módulos asignados',style:'color:#fea438;font-weight:bold;'}]";
         try {

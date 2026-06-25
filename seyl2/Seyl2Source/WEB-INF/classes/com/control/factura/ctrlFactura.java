@@ -19,13 +19,13 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 public class ctrlFactura
   extends HttpServlet

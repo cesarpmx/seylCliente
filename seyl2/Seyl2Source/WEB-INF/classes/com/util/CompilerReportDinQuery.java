@@ -27,14 +27,14 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperCompileManager;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletOutputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;

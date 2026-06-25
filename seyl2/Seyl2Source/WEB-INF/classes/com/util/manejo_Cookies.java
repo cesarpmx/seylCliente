@@ -5,7 +5,7 @@
  */
 
 package com.util;
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 /**
  *
  * @author  mruiz

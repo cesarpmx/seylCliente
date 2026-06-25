@@ -4,10 +4,10 @@
  */
 package com.dao.util;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.EntityExistsException;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.EntityExistsException;
 
 /**
  *
@@ -70,8 +70,6 @@ public class HibernateUtil {
                 e.clear();
                 e.close();
                 e=null;
-                
-
             }
         } catch (EntityExistsException ex) {
         }
@@ -89,11 +87,8 @@ public class HibernateUtil {
 //
 //                e = null;
 //
-//
 //            }
 //        } catch (EntityExistsException ex) {
 //        }
 //    }
-
-
 }

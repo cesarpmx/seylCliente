@@ -12,8 +12,8 @@ import java.net.*;
 
 import java.util.HashMap;
 import java.util.Map;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 /**
  *

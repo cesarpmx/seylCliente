@@ -9,7 +9,8 @@ public class SQLControl
 
   public static String obtenModulos()
   {
-    return "Select am,arm,(Select ams.amsscript From Liadminmoduloscript ams Where ams.amsidmoduloscript=am.amidmodulo) From Liadminmodulo am,Liadminrolmodulo arm WHERE am.amidmodulo = arm.armidadminmodulo And arm.armidpuesto = ?1 Order By am.amorden";
+    // CORRECCIÓN FINAL: ID contra ID en la subconsulta, y Objeto contra Objeto en el WHERE principal
+    return "Select am,arm,(Select ams.amsscript From Liadminmoduloscript ams Where ams.amsidmoduloscript=am.amidmodulo) From Liadminmodulo am,Liadminrolmodulo arm WHERE am = arm.armidadminmodulo And arm.armidpuesto = ?1 Order By am.amorden";
   }
 
   public static String obtenAcciones()
