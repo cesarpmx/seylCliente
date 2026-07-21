@@ -918,12 +918,14 @@ function getModuloFacturas(){
                     dataIndex: 'prdcosto',
                     width: 0,
                     sortable: true
-                },{
-                    text: "Mover",
-                    dataIndex: 'mover',
-                    width: 70,
-                    sortable: false
-                }]
+                }
+//                ,{
+//                    text: "Mover",
+//                    dataIndex: 'mover',
+//                    width: 70,
+//                    sortable: false
+//                }
+            ]
             })]
         }
     };
