@@ -391,7 +391,7 @@ public class SQLCombo
   
   public static String obtenerAlmacen(String empresa)
   {
-    return "SELECT aloid AS IDCAMPO, alonombre AS CAMPO FROM sealmacenes, sealmlogicos where aloalmid = almid and almwebvisible = 'S' order by aloid ";
+    return "SELECT aloid AS IDCAMPO, (almnombre || ' - ' || alonombre) AS CAMPO FROM sealmacenes, sealmlogicos, sealmempresa where aloalmid = almid and almwebvisible = 'S' and aemaloid = aloid and aemempid = " + empresa + " order by aloid ";
   }
   
   public static String obtenerAlmacenFisico(String empresa)

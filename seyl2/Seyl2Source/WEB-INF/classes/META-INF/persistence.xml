@@ -11,7 +11,7 @@
     
     <properties>
       <property name="jakarta.persistence.jdbc.driver" value="oracle.jdbc.driver.OracleDriver"/>
-      <property name="jakarta.persistence.jdbc.url" value="jdbc:oracle:thin:@transfermx.dyndns.org:1521:xe"/>
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:oracle:thin:@globalmx.dyndns.org:1521:xe"/>
       <property name="jakarta.persistence.jdbc.user" value="seyl2"/>
       <property name="jakarta.persistence.jdbc.password" value="seyl2"/>
       

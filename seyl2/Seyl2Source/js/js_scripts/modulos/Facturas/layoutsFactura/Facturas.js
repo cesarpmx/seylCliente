@@ -642,7 +642,7 @@ function getModuloFacturas(){
                         }]
                     },{
                         xtype: 'container',
-                        // height: 35,
+                        height: 35,
                         msgTarget : 'side', 
                         defaults: {
                              labelWidth: 70,
@@ -654,7 +654,7 @@ function getModuloFacturas(){
                                 name:"cmbAlmacen",
                                 fieldLabel: 'Almacén',
                                 flex: 1,
-                                width: 250,
+                                width: 350,
                                 store: createStore('idTAlmacen','tipAlmacen',6,9),
                                 valueField: 'idTAlmacen',
                                 displayField: 'tipAlmacen',
@@ -688,7 +688,8 @@ function getModuloFacturas(){
                                 emptyText: 'Direccion del almacen',
                                 // typeAhead: true,
                                 readOnly: true,
-                                allowBlank: true     
+                                allowBlank: true,
+                                hidden: true
                         }]
                     },{
                         xtype: 'container',
@@ -704,7 +705,7 @@ function getModuloFacturas(){
                             name:"cmbFamili",
                             fieldLabel: 'Linea',
                             flex: 1,
-                            width: 250,
+                            width: 350,
                             store: createStore('idFamili','tipFamili',6,1),
                             valueField: 'idFamili',
                             displayField: 'tipFamili',
@@ -738,7 +739,7 @@ function getModuloFacturas(){
                             name:"cmbLine",
                             fieldLabel: 'Familia',
                             flex: 1,
-                            width: 250,
+                            width: 350,
                             store: createStoreLinea('idLine','tipLine',42,2,"null"),
                             valueField: 'idLine',
                             displayField: 'tipLine',
