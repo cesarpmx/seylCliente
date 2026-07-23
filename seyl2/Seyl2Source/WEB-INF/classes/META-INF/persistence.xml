@@ -7,6 +7,42 @@
   <persistence-unit name="Argo" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     
+    <!-- Entidades del paquete com.entity -->
+    <class>com.entity.Liadminacciones</class>
+    <class>com.entity.Liadminaccionscript</class>
+    <class>com.entity.Liadminmodulo</class>
+    <class>com.entity.Liadminmoduloacciones</class>
+    <class>com.entity.Liadminmoduloscript</class>
+    <class>com.entity.Liadminrolmodulo</class>
+    <class>com.entity.Liadminrolmoduloacciones</class>
+    <class>com.entity.Lialmacenes</class>
+    <class>com.entity.Licadenas</class>
+    <class>com.entity.Lichoferes</class>
+    <class>com.entity.Liclientes</class>
+    <class>com.entity.Licomboopciones</class>
+    <class>com.entity.Liconexion</class>
+    <class>com.entity.Lictlareasatencion</class>
+    <class>com.entity.Lictlcodigospostales</class>
+    <class>com.entity.Lictlcombo</class>
+    <class>com.entity.Lictlorigen</class>
+    <class>com.entity.Lidepartamentos</class>
+    <class>com.entity.Liembarques</class>
+    <class>com.entity.Liempresas</class>
+    <class>com.entity.Liestados</class>
+    <class>com.entity.Liestatusembarque</class>
+    <class>com.entity.Liinventario</class>
+    <class>com.entity.Limotrechazos</class>
+    <class>com.entity.Limovalmacen</class>
+    <class>com.entity.Lipoblaciones</class>
+    <class>com.entity.Liprdmover</class>
+    <class>com.entity.Liproveedores</class>
+    <class>com.entity.Lipuestoorigen</class>
+    <class>com.entity.Liremisiones</class>
+    <class>com.entity.Litipocliente</class>
+    <class>com.entity.Liusuariopuesto</class>
+    <class>com.entity.Liusuarios</class>
+    <class>com.entity.Seremisiones</class>
+
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     
     <properties>
@@ -16,7 +52,6 @@
       <property name="jakarta.persistence.jdbc.password" value="seyl2"/>
       
       <property name="eclipselink.target-database" value="Oracle"/>
-      
       <property name="eclipselink.weaving" value="false"/>
     </properties>
   </persistence-unit>

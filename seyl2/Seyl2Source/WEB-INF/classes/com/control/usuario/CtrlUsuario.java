@@ -34,7 +34,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-
 /**
  *
  * @author m@rco.@andrade
@@ -92,12 +91,12 @@ public class CtrlUsuario extends HttpServlet {
             out.close();
         }
 
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -111,6 +110,7 @@ public class CtrlUsuario extends HttpServlet {
 
     /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -124,6 +124,7 @@ public class CtrlUsuario extends HttpServlet {
 
     /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override
@@ -197,7 +198,6 @@ public class CtrlUsuario extends HttpServlet {
 //                session.setAttribute("idAcceso", acceso.getIdAdminBitacoraAcceso());
 //            }
 //            em.getTransaction().commit();
-
         } catch (Exception e) {
             em.getTransaction().rollback();
             e.printStackTrace();
@@ -225,33 +225,39 @@ public class CtrlUsuario extends HttpServlet {
         }
         return usrU;
     }
+
     /* Metodo: ExtJS 4.1*/
 
     private String obtenModulosUsuario(HttpServletRequest request) {
 
         Liusuarios u = Utilities.ReactivarSession(request);
-        
-        // Validación preventiva: si el puesto es nulo, asigna un texto por defecto
+
+        // 1. VALIDACIÓN PRIMARIA: Si la sesión o la consulta devolvió null, detiene la ejecución
+        if (u == null) {
+            return "[{xtype:'label', text:'Sesión inválida o usuario no encontrado', style:'color:red;font-weight:bold;'}]";
+        }
+
+        // 2. Ahora sí es seguro invocar métodos de 'u'
         String nombrePuesto = (u.getUsuidpuesto() != null) ? u.getUsuidpuesto().getUpnombrepuesto() : "SIN PUESTO ASIGNADO";
 
         String welcome = "{xtype:'label',text:'" + nombrePuesto + "',style:'font-weight:bold;font-size:12px;'},"
                 + "{xtype:'label',html:'" + u.getUsunombre() + " " + u.getUsupaterno() + "',style:'color: black;font-weight: bold; font-size: 12px;'},";
         String strModulos = "[" + welcome + "{xtype:'label', text:'No tienes módulos asignados',style:'color:#fea438;font-weight:bold;'}]";
+
         try {
-            if (u != null) {
-                Vector vecPrm = new Vector();
-                vecPrm.add(u.getUsuidpuesto());
-                List lstModulos = EventManager.getArrayParameter(SQLControl.obtenModulos(), vecPrm);
-                if (!lstModulos.isEmpty()) {
-                    strModulos = "[" + welcome;
-                    for (int i = 0; i < lstModulos.size(); i++) {
-                        Object[] obj = (Object[]) lstModulos.get(i);
-                        Liadminmodulo am = (Liadminmodulo) obj[0];
-                        String script = Utilities.validaNull(obj[2]).toString();
-                        strModulos += "{text:'" + am.getAmnombremodulo() + "',iconCls:'" + Utilities.validaNull(am.getAmiconocls()).toString() + "',scale:'small',handler:function(){LoadMenu("+am.getAmidmodulo()+");}},";
-                    }
-                    strModulos = strModulos.substring(0, strModulos.length() - 1) + "]";
+            Vector vecPrm = new Vector();
+            vecPrm.add(u.getUsuidpuesto());
+            List lstModulos = EventManager.getArrayParameter(SQLControl.obtenModulos(), vecPrm);
+
+            if (lstModulos != null && !lstModulos.isEmpty()) {
+                strModulos = "[" + welcome;
+                for (int i = 0; i < lstModulos.size(); i++) {
+                    Object[] obj = (Object[]) lstModulos.get(i);
+                    Liadminmodulo am = (Liadminmodulo) obj[0];
+                    String script = Utilities.validaNull(obj[2]).toString();
+                    strModulos += "{text:'" + am.getAmnombremodulo() + "',iconCls:'" + Utilities.validaNull(am.getAmiconocls()).toString() + "',scale:'small',handler:function(){LoadMenu(" + am.getAmidmodulo() + ");}},";
                 }
+                strModulos = strModulos.substring(0, strModulos.length() - 1) + "]";
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -264,24 +270,25 @@ public class CtrlUsuario extends HttpServlet {
         String strAcciones = "[]";
         try {
             HttpSession s = request.getSession();
-            if(!Utilities.obtenParametro(request, "mdl").equals("")){
-            s.setAttribute("modulo", Integer.parseInt(Utilities.obtenParametro(request, "mdl")));
-            Liusuarios usr = Utilities.ReactivarSession(request);
-            if (usr != null) {
-                Vector vecPrm = new Vector();
-                vecPrm.add(usr.getUsuidpuesto());
-                vecPrm.add(Integer.parseInt(Utilities.obtenParametro(request, "mdl")));
-                List lstModulos = EventManager.getArrayParameter(SQLControl.obtenAcciones(), vecPrm);
-                ArrayList array = new ArrayList();
-                Hashtable hashOrg = new Hashtable();
-                hashOrg.clear();
-                hashOrg.put("prm", "%Org%");
-                hashOrg.put("var", usr.getUsuidorigen().getOidorigen());
-                array.add(hashOrg);
-                if (!lstModulos.isEmpty()) {
-                    strAcciones = ("[" + this.obtenArbolAcciones(0, lstModulos, array, usr.getUsuidorigen().getOidorigen(), usr) + "]").replace(",]", "]");
+            if (!Utilities.obtenParametro(request, "mdl").equals("")) {
+                s.setAttribute("modulo", Integer.parseInt(Utilities.obtenParametro(request, "mdl")));
+                Liusuarios usr = Utilities.ReactivarSession(request);
+                if (usr != null) {
+                    Vector vecPrm = new Vector();
+                    vecPrm.add(usr.getUsuidpuesto());
+                    vecPrm.add(Integer.parseInt(Utilities.obtenParametro(request, "mdl")));
+                    List lstModulos = EventManager.getArrayParameter(SQLControl.obtenAcciones(), vecPrm);
+                    ArrayList array = new ArrayList();
+                    Hashtable hashOrg = new Hashtable();
+                    hashOrg.clear();
+                    hashOrg.put("prm", "%Org%");
+                    hashOrg.put("var", usr.getUsuidorigen().getOidorigen());
+                    array.add(hashOrg);
+                    if (!lstModulos.isEmpty()) {
+                        strAcciones = ("[" + this.obtenArbolAcciones(0, lstModulos, array, usr.getUsuidorigen().getOidorigen(), usr) + "]").replace(",]", "]");
+                    }
                 }
-            }}
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -326,7 +333,7 @@ public class CtrlUsuario extends HttpServlet {
         return jsonArbol;
     }
 
-     private String obtenArbolActividades(int idPadre, List lst, ArrayList arrayReplace, String difPrm, String idAcc, HttpServletRequest request, boolean into) {
+    private String obtenArbolActividades(int idPadre, List lst, ArrayList arrayReplace, String difPrm, String idAcc, HttpServletRequest request, boolean into) {
         String jsonArbol = "";
         String d = (difPrm == null ? "" : difPrm);
         HttpSession s = request.getSession();
@@ -340,7 +347,7 @@ public class CtrlUsuario extends HttpServlet {
                 String script = Utilities.validaNull(obj[1]).toString();
 
                 int idReceta = 0;
-  Hashtable hashPrd2 = new Hashtable();
+                Hashtable hashPrd2 = new Hashtable();
                 hashPrd2.clear();
                 hashPrd2.put("prm", "%idRect%");
                 hashPrd2.put("var", idReceta);
@@ -455,7 +462,6 @@ public class CtrlUsuario extends HttpServlet {
                 u.setUsucp(Utilities.obtenParametro(request, "codpost"));
 
 //                u.setUIdUsuarioAlta(usr.getUsuclave());
-
                 int area = Integer.parseInt(Utilities.obtenParametro(request, "pnt_atn").equals("") ? "0" : Utilities.obtenParametro(request, "pnt_atn"));
                 Lictlareasatencion aat = em.getReference(Lictlareasatencion.class, area);
 
@@ -472,14 +478,10 @@ public class CtrlUsuario extends HttpServlet {
 
                 // Region r = em.getReference(Region.class, 1);
 ////                u.setUIdRegion(1);
-
 //                CtlActividad ca = em.getReference(CtlActividad.class, 1);
                 // u.setUIdActividad(1);
-
                 //UsuarioHorario ha = em.getReference(UsuarioHorario.class, 1);
 //                u.setUIdUsuarioHorario(1);
-
-
                 em.persist(u);
 
                 /*  if (origen != 3) {
@@ -557,7 +559,6 @@ public class CtrlUsuario extends HttpServlet {
                 uhv6.setUhvIdHorario(em.getReference(UsuarioHorario.class, 3));//3
                 em.persist(uhv6);
                 }*/
-
                 em.getTransaction().commit();
                 strUsr = "{success:true,msg:'El usuario se registró con Exito',funcion:IniciarAccion('pnlTreeAccionesADM',false,false,'pnlCenter',new com.punto.pen.PanelBienvenida({msg:'Administrador'}))}";
             }
@@ -659,13 +660,10 @@ public class CtrlUsuario extends HttpServlet {
 
                     //Region r = em.getReference(Region.class, 1);
 //                    u.setUIdRegion(1);
-
                     //CtlActividad ca = em.getReference(CtlActividad.class, 1);
 //                    u.setUIdActividad(1);
-
                     //UsuarioHorario ha = em.getReference(UsuarioHorario.class, 1);
 //                    u.setUIdUsuarioHorario(1);
-
                     em.merge(u);
 
                     em.getTransaction().commit();

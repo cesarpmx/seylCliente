@@ -1,94 +1,56 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.dao.util;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import jakarta.persistence.EntityExistsException;
 
-/**
- *
- * @author Marco Andrade
- */
 public class HibernateUtil {
 
-    private static final ThreadLocal threadSession = new ThreadLocal();
-    private static EntityManagerFactory entityFactory;
+    private static final ThreadLocal<EntityManager> threadSession = new ThreadLocal<>();
+    private static volatile EntityManagerFactory entityFactory;
 
-    static {
-        try {
+    // Inicialización perezosa (Lazy) y segura para multihilo
+    public static synchronized EntityManagerFactory getFactory() {
+        if (entityFactory == null || !entityFactory.isOpen()) {
             entityFactory = Persistence.createEntityManagerFactory("Argo");
-        } catch (Throwable ex) {
-            ex.printStackTrace(System.out);
-            throw new ExceptionInInitializerError(ex);
         }
+        return entityFactory;
     }
 
     public static EntityManager getEntityManager() {
-        EntityManager e = (EntityManager) threadSession.get();
-        try {
-            if (e == null) {
-                e = entityFactory.createEntityManager();
-                threadSession.set(e);
-            }
-        } catch (EntityExistsException ex) {
-            throw new EntityExistsException(ex);
+        EntityManager e = threadSession.get();
+        if (e == null || !e.isOpen()) {
+            e = getFactory().createEntityManager();
+            threadSession.set(e);
         }
         return e;
     }
 
-//    public static EntityManager getEntityManager2() {
-//        EntityManager e = null;
-//        try {
-//            e = entityFactory.createEntityManager();
-//        } catch (EntityExistsException ex) {
-//            throw new EntityExistsException(ex);
-//        }
-//        //refreshConexion(e);
-//        return e;
-//    }
-
-    public static void closeSessionFactory() {
+    public static synchronized void closeSessionFactory() {
         try {
-            entityFactory.close();
-        } catch (EntityExistsException ex) {
+            if (entityFactory != null && entityFactory.isOpen()) {
+                entityFactory.close();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            entityFactory = null;
         }
     }
 
     public static void closeSession() {
         try {
-            EntityManager e = (EntityManager) threadSession.get();
+            EntityManager e = threadSession.get();
             threadSession.remove();
-            threadSession.set(null);
             if (e != null) {
-                if(e.getTransaction().isActive()){
+                if (e.getTransaction().isActive()) {
                     e.getTransaction().rollback();
                 }
                 e.clear();
                 e.close();
-                e=null;
             }
-        } catch (EntityExistsException ex) {
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
-
-//    public static void closeSession2(EntityManager e) {
-//        try {
-//            if (e != null && e.isOpen()) {
-//                //8  e.flush();
-//                if (e.getTransaction().isActive()) {
-//                    e.getTransaction().rollback();
-//                }
-//                e.clear();
-//                e.close();
-//
-//                e = null;
-//
-//            }
-//        } catch (EntityExistsException ex) {
-//        }
-//    }
 }
