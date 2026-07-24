@@ -896,7 +896,7 @@ function getModuloFacturas() {
                             width: 90,
                             sortable: true
                         }, {
-                            text: "Decripción",
+                            text: "Descripción",
                             dataIndex: 'decripcion',
                             width: 250,
                             sortable: true
